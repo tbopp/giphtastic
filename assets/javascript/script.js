@@ -15,6 +15,7 @@ var gameArray = ["Final Fantasy", "Mass Effect", "Gears of War", "Dark Souls", "
           a.addClass("game");
           a.attr("data-name", gameArray[i]);
           a.text(gameArray[i]);
+          a.attr("data-state", "still");
           $("#games-view").append(a);
         }
       }
@@ -40,7 +41,7 @@ $(document).on("click", "button", function() {
           var rating = results[i].rating;
           var p = $("<p>").text("Rating: " + rating);
           var gameImage = $("<img>");
-          gameImage.attr("src", results[i].images.fixed_height.url);
+          gameImage.attr("src", results[i].images.fixed_height_still.url);
           gifDiv.append(p);
           gifDiv.append(gameImage);
           $("#games-gif-view").prepend(gifDiv);
@@ -56,4 +57,20 @@ $(document).on("click", "button", function() {
         var game = $("#game-input").val().trim();
         gameArray.push(game);
         renderButtons();
+      });
+
+      $(".game").on("click", function() {
+        // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
+        var state = $(this).attr("data-state");
+        // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+        // Then, set the image's data-state to animate
+        // Else set src to the data-still value
+        if (state === "still") {
+          var animateURL = $(this).attr("data-animate")//https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200.gif
+          $(this).attr("src", animateURL);
+          $(this).attr("data-state", "animate");
+        } else {
+          $(this).attr("src", $(this).attr("data-still"));
+          $(this).attr("data-state", "still");
+        }
       });
